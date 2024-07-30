@@ -14,6 +14,18 @@
         url: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-linux-{{ gcloud_supported_architecture[ansible_architecture] }}.tar.gz
         arg_components: "{{ ('--additional-components ' + gcloud_additional_components | join(' ')) if gcloud_additional_components | length > 0 else '' }}"
 
+    - name: Check installation directory
+      ansible.builtin.stat:
+        path: "{{ gcloud_install_dir }}"
+      register: install_dir
+
+    - name: Create installation directory
+      when: not install_dir.stat.exists
+      ansible.builtin.file:
+        path: "{{ gcloud_install_dir }}"
+        state: directory
+        mode: 0755
+
     - name: Download archive {{ url }}
       ansible.builtin.get_url:
         url: "{{ url }}"

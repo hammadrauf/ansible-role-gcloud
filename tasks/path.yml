@@ -1,10 +1,10 @@
 ---
-- name: Check shell config
+- name: Check shell config {{ item.path }}
   ansible.builtin.stat:
     path: "{{ item.path }}"
   register: res
 
-- name: Add path and completion to {{ item.path }}
+- name: Setup path and completion to {{ item.path }}
   ansible.builtin.blockinfile:
     path: "{{ item.path }}"
     marker: "# {mark} ANSIBLE MANAGED BLOCK: GOOGLE_CLOUD_SDK"
