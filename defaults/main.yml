@@ -1,0 +1,11 @@
+---
+# google recommends to install gcloud sdk in user directory, not as root
+gcloud_install_dir: "{{ ansible_env.HOME }}"
+gcloud_additional_components: []
+gcloud_state: present
+
+# For this file you need to make sure it is exists
+# Otherwise it will be skipped
+gcloud_fish_config: "{{ ansible_env.HOME }}/.config/fish/config.fish"
+gcloud_bash_config: "{{ ansible_env.HOME }}/.bashrc"
+gcloud_zsh_config: "{{ ansible_env.HOME }}/.zshrc"

@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  author: Laba Subagia
+  namespace: labasubagia
+  role_name: gcloud
+  description: Install Google Cloud CLI
+  license: MIT
+  min_ansible_version: '2.16'
+  platforms:
+    - name: Ubuntu
+      versions:
+        - noble
+    - name: Debian
+      versions:
+        - bookworm
+    - name: Fedora
+      versions:
+        - '40'
+  galaxy_tags:
+    - gcloud
+    - cli
+dependencies: []

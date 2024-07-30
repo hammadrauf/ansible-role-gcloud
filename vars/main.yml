@@ -1,0 +1,49 @@
+---
+gcloud_supported_architecture:
+  armv6l: arm
+  armv7l: arm
+  aarch64: arm
+  x86_64: x86_64
+  i386: x86
+
+gcloud_supported_components:
+  - app-engine-go
+  - appctl
+  - package-go-module
+  - cbt
+  - bigtable
+  - cloud-datastore-emulator
+  - cloud-firestore-emulator
+  - pubsub-emulator
+  - cloud-run-proxy
+  - cloud-sql-proxy
+  - cloud-spanner-emulator
+  - harbourbridge
+  - docker-credential-gcr
+  - kustomize
+  - log-streaming
+  - minikube
+  - nomos
+  - local-extract
+  - skaffold
+  - spanner-migration-tool
+  - terraform-tools
+  - anthos-auth
+  - config-connector
+  - enterprise-certificate-proxy
+  - alpha
+  - beta
+  - app-engine-java
+  - app-engine-python
+  - app-engine-python-extras
+  - gke-gcloud-auth-plugin
+  - istioctl
+  - kpt
+  - kubectl
+  - kubectl-oidc
+  - pkg
+  - bq
+  - bundled-python3-unix
+  - gsutil
+  - core
+  - gcloud-crc32c

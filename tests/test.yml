@@ -1,0 +1,11 @@
+---
+- name: Test Local
+  hosts: localhost
+  connection: local
+  roles:
+    - role: labasubagia.gcloud
+      vars:
+        gcloud_additional_components:
+          - gke-gcloud-auth-plugin
+          - kubectl
+        gcloud_state: present
