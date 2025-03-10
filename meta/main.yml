@@ -1,7 +1,7 @@
 ---
 galaxy_info:
-  author: Laba Subagia
-  namespace: labasubagia
+  author: Laba Subagia, Hammad Rauf
+  namespace: hammadrauf
   role_name: gcloud
   description: Install Google Cloud CLI
   license: MIT
