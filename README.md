@@ -1,7 +1,8 @@
 Google Cloud CLI
 =========
 
-Ansible role to install [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) linux
+Ansible role to install [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) linux. 
+Forked from [labasubagia.gcloud](https://github.com/labasubagia/ansible-role-gcloud)
 
 > Recommended to install inside home user directory (by official documentation) as non-root
 
@@ -39,7 +40,7 @@ Example Playbook
 ```yaml
 - hosts: servers
   roles:
-    - role: labasubagia.gcloud
+    - role: hammadrauf.gcloud
       vars:
         gcloud_additional_components:
           - gke-gcloud-auth-plugin
@@ -55,3 +56,5 @@ Author Information
 ------------------
 
 [Laba Subagia](https://github.com/labasubagia)
+
+This Forked maintained by [Hammad Rauf](https://github.com/hammadrauf)
