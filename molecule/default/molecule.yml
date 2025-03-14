@@ -1,9 +1,9 @@
 ---
 driver:
-  name: docker
+  name: podman
 platforms:
   - name: "${MOLECULE_IMAGE:-ubuntu2404i}"
-    image: "docker.io/geerlingguy/docker-${MOLECULE_IMAGE:-ubuntu2204}-ansible:latest"
+    image: "docker.io/geerlingguy/docker-${MOLECULE_IMAGE:-ubuntu2204i}-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
@@ -11,7 +11,7 @@ platforms:
     pre_build_image: true
     cgroupns_mode: host
   - name: "${MOLECULE_IMAGE:-debian12i}"
-    image: "docker.io/geerlingguy/docker-${MOLECULE_IMAGE:-debian12}-ansible:latest"
+    image: "docker.io/geerlingguy/docker-${MOLECULE_IMAGE:-debian12i}-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
@@ -19,7 +19,7 @@ platforms:
     pre_build_image: true
     cgroupns_mode: host
   - name: "${MOLECULE_IMAGE:-fedora40i}"
-    image: "docker.io/geerlingguy/docker-${MOLECULE_IMAGE:-fedora40}-ansible:latest"
+    image: "docker.io/geerlingguy/docker-${MOLECULE_IMAGE:-fedora40i}-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
