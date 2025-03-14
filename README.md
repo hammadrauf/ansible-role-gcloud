@@ -26,14 +26,16 @@ The following variables will change the behavior of this role (default values ar
 gcloud_additional_components: []
 ```
 
-Test Locally using Ansible Molecule
------------------------------------
+Test Locally using Lint and Ansible Molecule
+--------------------------------------------
 
 ```
 rm -rf ~/.ansible/roles/
 molecule test --all
 molecule test --all --driver-name=podman
 molecule test --all -d docker
+
+yamllint -v . && ansible-lint -v . && molecule test --all
 ```
 
 
