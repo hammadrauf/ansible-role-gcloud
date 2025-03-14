@@ -1,31 +1,33 @@
 ---
-- debug: var=ansible_os_family
+- name: Debug ansible_os_family
+  ansible.builtin.debug: var=ansible_os_family
+
 - name: Load OS specific Vars file
-  include_vars: "{{ item }}"
+  ansible.builtin.include_vars: "{{ item }}"
   with_first_found:
     - "os_specific_{{ ansible_os_family }}.yml"
     - "os_specific_default.yml"
 
 - name: Update and upgrade apt packages
   become: true
-  apt:
-    upgrade: yes
-    update_cache: yes
+  ansible.builtin.apt:
+    upgrade: true
+    update_cache: true
     cache_valid_time: 86400 #One day
   when:
     - ansible_os_family == 'Debian'
 
 - name: Update and upgrade yum packages
   become: true
-  yum:
-    update_cache: yes
+  ansible.builtin.yum:
+    update_cache: true
     name: '*'
-    state: latest
+    state: present
   when:
     - ansible_os_family == 'RedHat'
 
 - name: Install gcloud pre-required packages
-  package:
+  ansible.builtin.package:
     name:
       - "apt-transport-https"
       - "ca-certificates"
@@ -54,7 +56,7 @@
   become: true
 
 - name: Install Additional Gcloud Packages
-  package:
+  ansible.builtin.package:
     name: "{{ gc_package }}"
     state: present
   become: true
