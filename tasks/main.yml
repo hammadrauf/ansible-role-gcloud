@@ -8,6 +8,14 @@
   when:
     - ansible_facts['os_family'] == "Debian"
 
+- name : Update all packages for RHEL Family
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+    update_cache: true
+  when:
+    - ansible_facts['os_family'] == "RedHat"
+
 - name: Install gcloud pre-required packages
   ansible.builtin.package:
     name:
@@ -17,6 +25,8 @@
       - "curl"
     state: present
   become: true
+  when:
+    - ansible_facts['os_family'] == "Debian"
 
 - name: Add GCloud key downloaded from URL to GCloud Keyring
   ansible.builtin.apt_key:
@@ -24,18 +34,48 @@
     keyring: /usr/share/keyrings/cloud.google.gpg
     state: present
   become: true
+  when:
+    - ansible_facts['os_family'] == "Debian"
 
 - name: Add GCloud repository into sources list
   ansible.builtin.apt_repository:
     repo: "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main"
     state: present
   become: true
+  when:
+    - ansible_facts['os_family'] == "Debian"
 
-- name: Update the repository cache and Install GCloud on Host-Server
+- name: Install Google Cloud CLI repository in RHEL Family
+  ansible.builtin.yum_repository:
+    name: "GoogleCloud-CLI"
+    state: present
+    description: "Google Cloud CLI"
+    baseurl: "https://packages.cloud.google.com/yum/repos/cloud-sdk-el9-x86_64"
+    gpgcheck: true
+    gpgkey: "https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg"
+  register: yum_repository_output
+  when:
+    - ansible_facts['os_family'] == "RedHat"
+
+- debug: var=yum_repository_output
+  when:
+    - ansible_facts['os_family'] == "RedHat"
+
+- name: Update the repository cache and Install GCloud in Debian/Ubuntu family
   ansible.builtin.apt:
     name: "google-cloud-cli"
     update_cache: true
   become: true
+  when:
+    - ansible_facts['os_family'] == "Debian"
+
+- name : Update the repository cache and Install GCloud in RHEL family
+  ansible.builtin.dnf:
+    name: "google-cloud-cli"
+    state: latest
+    update_cache: true
+  when:
+    - ansible_facts['os_family'] == "RedHat"
 
 - name: Install Additional Gcloud Packages
   ansible.builtin.package:
