@@ -11,7 +11,7 @@
 - name: Update all packages for RHEL Family
   ansible.builtin.dnf:
     name: "*"
-    state: latest
+    state: latest # noqa package-latest
     update_cache: true
   when:
     - ansible_facts['os_family'] == "RedHat"
@@ -53,11 +53,6 @@
     baseurl: "https://packages.cloud.google.com/yum/repos/cloud-sdk-el9-x86_64"
     gpgcheck: true
     gpgkey: "https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg"
-  register: yum_repository_output
-  when:
-    - ansible_facts['os_family'] == "RedHat"
-
-- debug: var=yum_repository_output
   when:
     - ansible_facts['os_family'] == "RedHat"
 
@@ -72,7 +67,7 @@
 - name: Update the repository cache and Install GCloud in RHEL family
   ansible.builtin.dnf:
     name: "google-cloud-cli"
-    state: latest
+    state: present
     update_cache: true
   when:
     - ansible_facts['os_family'] == "RedHat"
