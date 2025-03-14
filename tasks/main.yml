@@ -13,7 +13,7 @@
     update_cache: yes
     cache_valid_time: 86400 #One day
   when:
-    - ansible_os_family == 'Debian'  
+    - ansible_os_family == 'Debian'
 
 - name: Update and upgrade yum packages
   become: true
@@ -22,7 +22,7 @@
     name: '*'
     state: latest
   when:
-    - ansible_os_family == 'RedHat' 
+    - ansible_os_family == 'RedHat'
 
 - name: Install gcloud pre-required packages
   package:
