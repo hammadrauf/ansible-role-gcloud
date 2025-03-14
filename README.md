@@ -2,9 +2,9 @@ Google Cloud CLI
 =========
 
 Ansible role to install [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) linux. 
-Forked from [labasubagia.gcloud](https://github.com/labasubagia/ansible-role-gcloud)
+Forked from [labasubagia.gcloud](https://github.com/labasubagia/ansible-role-gcloud) but heavily re-scripted.
 
-> Recommended to install inside home user directory (by official documentation) as non-root
+> This is installs using standard install method on GCloud website. Installs system wide (for all users).
 
 Requirements
 ------------
@@ -14,7 +14,7 @@ Requirements
   - Ubuntu 24.04
   - Fedora 40
 
-> Note: Other distributions likely to work but not been tested
+> Note: Other (and/or newer) distributions likely to work but not been tested
 
 Role Variables
 --------------
@@ -23,23 +23,17 @@ The following variables will change the behavior of this role (default values ar
 
 ```yaml
 ## google recommends to install gcloud sdk in user directory, not as root
-gcloud_install_dir: "{{ ansible_env.HOME }}"
 gcloud_additional_components: []
-gcloud_state: present # present/absent
-
-# For this file you need to make sure it is exists
-# Otherwise it will be skipped
-gcloud_fish_config: "{{ ansible_env.HOME }}/.config/fish/config.fish"
-gcloud_bash_config: "{{ ansible_env.HOME }}/.bashrc"
-gcloud_zsh_config: "{{ ansible_env.HOME }}/.zshrc"
 ```
 
 Test Locally using Ansible Molecule
 -----------------------------------
+
 ```
 rm -rf ~/.ansible/roles/
 molecule test --all
 molecule test --all --driver-name=podman
+molecule test --all -d docker
 ```
 
 
@@ -64,5 +58,5 @@ Author Information
 ------------------
 
 [Laba Subagia](https://github.com/labasubagia)
-
+  
 This Forked maintained by [Hammad Rauf](https://github.com/hammadrauf)
