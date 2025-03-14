@@ -1,6 +1,6 @@
 ---
 driver:
-  name: docker
+  name: podman
 platforms:
   - name: "${MOLECULE_IMAGE:-ubuntu2404}"
     image: "docker.io/geerlingguy/docker-${MOLECULE_IMAGE:-ubuntu2204}-ansible:latest"

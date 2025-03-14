@@ -37,8 +37,9 @@ gcloud_zsh_config: "{{ ansible_env.HOME }}/.zshrc"
 Test Locally using Ansible Molecule
 -----------------------------------
 ```
- molecule test --all
-  molecule test --all --driver-name=podman
+rm -rf ~/.ansible/roles/
+molecule test --all
+molecule test --all --driver-name=podman
 ```
 
 
