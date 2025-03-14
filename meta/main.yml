@@ -13,9 +13,6 @@ galaxy_info:
     - name: Debian
       versions:
         - bookworm
-    - name: Fedora
-      versions:
-        - '40'
   galaxy_tags:
     - gcloud
     - cli

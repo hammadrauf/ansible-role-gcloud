@@ -1,68 +1,131 @@
 ---
-- name: Assert input
-  ansible.builtin.assert:
-    that:
-      - gcloud_state in ['present', 'absent']
-      - ansible_architecture in gcloud_supported_architecture
-      - gcloud_additional_components | difference(gcloud_supported_components) | length == 0
+- debug: var=ansible_os_family
+- name: Load OS specific Vars file
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "os_specific_{{ ansible_os_family }}.yml"
+    - "os_specific_default.yml"
 
-- name: Present
-  when: gcloud_state == 'present'
-  block:
-    - name: Set url
-      ansible.builtin.set_fact:
-        url: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-linux-{{ gcloud_supported_architecture[ansible_architecture] }}.tar.gz
-        arg_components: "{{ ('--additional-components ' + gcloud_additional_components | join(' ')) if gcloud_additional_components | length > 0 else '' }}"
+- name: Update and upgrade apt packages
+  become: true
+  apt:
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: 86400 #One day
+  when:
+    - ansible_os_family == 'Debian'  
 
-    - name: Check installation directory
-      ansible.builtin.stat:
-        path: "{{ gcloud_install_dir }}"
-      register: install_dir
+- name: Update and upgrade yum packages
+  become: true
+  yum:
+    update_cache: yes
+    name: '*'
+    state: latest
+  when:
+    - ansible_os_family == 'RedHat' 
 
-    - name: Create installation directory
-      when: not install_dir.stat.exists
-      ansible.builtin.file:
-        path: "{{ gcloud_install_dir }}"
-        state: directory
-        mode: 0755
+- name: Install gcloud pre-required packages
+  package:
+    name:
+      - "apt-transport-https"
+      - "ca-certificates"
+      - "gnupg"
+      - "curl"    
+    state: present
+  become: true
 
-    - name: Download archive {{ url }}
-      ansible.builtin.get_url:
-        url: "{{ url }}"
-        dest: "/tmp/{{ url | basename }}"
-        mode: 0644
-        timeout: 40
+- name: Add GCloud key downloaded from URL to GCloud Keyring
+  ansible.builtin.apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    keyring: /usr/share/keyrings/cloud.google.gpg
+    state: present
+  become: true
 
-    - name: Extract archive
-      ansible.builtin.unarchive:
-        src: "/tmp/{{ url | basename }}"
-        dest: "{{ gcloud_install_dir }}"
-        remote_src: true
-        mode: 0755
-      args:
-        creates: "{{ gcloud_install_dir }}/google-cloud-sdk"
+- name: Add GCloud repository into sources list
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main"
+    state: present
+  become: true
 
-    - name: Install
-      ansible.builtin.command:
-        cmd: "{{ gcloud_install_dir }}/google-cloud-sdk/install.sh --quiet {{ arg_components }}"
-      register: res
-      changed_when: '"Update done!" in res.stdout'
+- name: Update the repository cache and Install GCloud on Host-Server
+  ansible.builtin.apt:
+    name: "google-cloud-cli"
+    update_cache: yes
+  become: true
 
-- name: Absent
-  when: gcloud_state == 'absent'
-  block:
-    - name: Remove gcloud SDK
-      ansible.builtin.file:
-        path: "{{ gcloud_install_dir }}/google-cloud-sdk"
-        state: absent
+- name: Install Additional Gcloud Packages
+  package:
+    name: "{{ gc_package }}"
+    state: present
+  become: true
+  loop: "{{ gcloud_additional_components }}"
+  loop_control:
+    loop_var: gc_package
 
-- name: Setup path and completion
-  ansible.builtin.include_tasks:
-    file: path.yml
-  loop:
-    - name: fish
-      path: "{{ gcloud_fish_config }}"
-    - name: bash
-      path: "{{ gcloud_bash_config }}"
-    - name: zsh
-      path: "{{ gcloud_zsh_config }}"
+# - name: Assert input
+#   ansible.builtin.assert:
+#     that:
+#       - gcloud_state in ['present', 'absent']
+#       - ansible_architecture in gcloud_supported_architecture
+#       - gcloud_additional_components | difference(gcloud_supported_components) | length == 0
+
+# - name: Present
+#   when: gcloud_state == 'present'
+#   block:
+#     - name: Set url
+#       ansible.builtin.set_fact:
+#         url: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-linux-{{ gcloud_supported_architecture[ansible_architecture] }}.tar.gz
+#         arg_components: "{{ ('--additional-components ' + gcloud_additional_components | join(' ')) if gcloud_additional_components | length > 0 else '' }}"
+
+#     - name: Check installation directory
+#       ansible.builtin.stat:
+#         path: "{{ gcloud_install_dir }}"
+#       register: install_dir
+
+#     - name: Create installation directory
+#       when: not install_dir.stat.exists
+#       ansible.builtin.file:
+#         path: "{{ gcloud_install_dir }}"
+#         state: directory
+#         mode: 0755
+
+#     - name: Download archive {{ url }}
+#       ansible.builtin.get_url:
+#         url: "{{ url }}"
+#         dest: "/tmp/{{ url | basename }}"
+#         mode: 0644
+#         timeout: 40
+
+#     - name: Extract archive
+#       ansible.builtin.unarchive:
+#         src: "/tmp/{{ url | basename }}"
+#         dest: "{{ gcloud_install_dir }}"
+#         remote_src: true
+#         mode: 0755
+#       args:
+#         creates: "{{ gcloud_install_dir }}/google-cloud-sdk"
+
+#     - name: Install
+#       ansible.builtin.command:
+#         cmd: "{{ gcloud_install_dir }}/google-cloud-sdk/install.sh --quiet {{ arg_components }}"
+#       register: res
+#       changed_when: '"Update done!" in res.stdout'
+
+# - name: Absent
+#   when: gcloud_state == 'absent'
+#   block:
+#     - name: Remove gcloud SDK
+#       ansible.builtin.file:
+#         path: "{{ gcloud_install_dir }}/google-cloud-sdk"
+#         state: absent
+
+# - name: Setup path and completion
+#   ansible.builtin.include_tasks:
+#     file: path.yml
+#   loop:
+#     - name: fish
+#       path: "{{ gcloud_fish_config }}"
+#     - name: bash
+#       path: "{{ gcloud_bash_config }}"
+#     - name: zsh
+#       path: "{{ gcloud_zsh_config }}"
