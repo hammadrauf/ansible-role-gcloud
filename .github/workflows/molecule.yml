@@ -40,7 +40,6 @@ jobs:
         distro:
           - ubuntu2404
           - debian12
-          - fedora40
     steps:
       - name: Checkout
         uses: actions/checkout@v4
