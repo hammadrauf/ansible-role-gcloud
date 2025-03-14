@@ -1,7 +1,4 @@
 ---
-- name: Debug ansible_os_family
-  ansible.builtin.debug: var=ansible_os_family
-
 - name: Load OS specific Vars file
   ansible.builtin.include_vars: "{{ item }}"
   with_first_found:
@@ -52,7 +49,7 @@
 - name: Update the repository cache and Install GCloud on Host-Server
   ansible.builtin.apt:
     name: "google-cloud-cli"
-    update_cache: yes
+    update_cache: true
   become: true
 
 - name: Install Additional Gcloud Packages
