@@ -14,15 +14,6 @@
   when:
     - ansible_os_family == 'Debian'
 
-- name: Update and upgrade yum packages
-  become: true
-  ansible.builtin.yum:
-    update_cache: true
-    name: '*'
-    state: present
-  when:
-    - ansible_os_family == 'RedHat'
-
 - name: Install gcloud pre-required packages
   ansible.builtin.package:
     name:
