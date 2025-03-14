@@ -2,7 +2,7 @@
 driver:
   name: docker
 platforms:
-  - name: "${MOLECULE_IMAGE:-ubuntu2404}"
+  - name: "${MOLECULE_IMAGE:-ubuntu2404i}"
     image: "docker.io/geerlingguy/docker-${MOLECULE_IMAGE:-ubuntu2204}-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
@@ -10,7 +10,7 @@ platforms:
     privileged: true
     pre_build_image: true
     cgroupns_mode: host
-  - name: "${MOLECULE_IMAGE:-debian12}"
+  - name: "${MOLECULE_IMAGE:-debian12i}"
     image: "docker.io/geerlingguy/docker-${MOLECULE_IMAGE:-debian12}-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
@@ -18,7 +18,7 @@ platforms:
     privileged: true
     pre_build_image: true
     cgroupns_mode: host
-  - name: "${MOLECULE_IMAGE:-fedora40}"
+  - name: "${MOLECULE_IMAGE:-fedora40i}"
     image: "docker.io/geerlingguy/docker-${MOLECULE_IMAGE:-fedora40}-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
