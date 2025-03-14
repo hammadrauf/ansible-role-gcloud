@@ -34,6 +34,13 @@ gcloud_bash_config: "{{ ansible_env.HOME }}/.bashrc"
 gcloud_zsh_config: "{{ ansible_env.HOME }}/.zshrc"
 ```
 
+Test Locally using Ansible Molecule
+-----------------------------------
+```
+ molecule test --all
+  molecule test --all --driver-name=podman
+```
+
 
 Example Playbook
 ----------------
