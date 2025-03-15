@@ -54,5 +54,5 @@ jobs:
           PY_COLORS: "1"
           ANSIBLE_FORCE_COLOR: "1"
           MOLECULE_IMAGE: "docker.io/geerlingguy/docker-${{ matrix.distro }}-ansible:latest"
-          MOLECULE_DISTRO: "${{ matrix.distro }}"
+          MOLECULE_DISTRO: "docker.io/geerlingguy/docker-${{ matrix.distro }}-ansible:latest"
           MOLECULE_CONTAINER_NAME: "instance-${{ matrix.distro }}"
