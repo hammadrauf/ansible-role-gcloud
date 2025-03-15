@@ -1,31 +1,42 @@
 ---
 driver:
   name: podman
+
+# platforms:
+#   - name: "${MOLECULE_IMAGE:-ubuntu2404}"
+#     image: "docker.io/geerlingguy/docker-${MOLECULE_IMAGE:-ubuntu2204}-ansible:latest"
+#     command: ${MOLECULE_DOCKER_COMMAND:-""}
+#     volumes:
+#       - /sys/fs/cgroup:/sys/fs/cgroup:rw
+#     privileged: true
+#     pre_build_image: true
+#     cgroupns_mode: host
+#   - name: "${MOLECULE_IMAGE:-debian12}"
+#     image: "docker.io/geerlingguy/docker-${MOLECULE_IMAGE:-debian12}-ansible:latest"
+#     command: ${MOLECULE_DOCKER_COMMAND:-""}
+#     volumes:
+#       - /sys/fs/cgroup:/sys/fs/cgroup:rw
+#     privileged: true
+#     pre_build_image: true
+#     cgroupns_mode: host
+#   - name: "${MOLECULE_IMAGE:-fedora40}"
+#     image: "docker.io/geerlingguy/docker-${MOLECULE_IMAGE:-fedora40}-ansible:latest"
+#     command: ${MOLECULE_DOCKER_COMMAND:-""}
+#     volumes:
+#       - /sys/fs/cgroup:/sys/fs/cgroup:rw
+#     privileged: true
+#     pre_build_image: true
+#     cgroupns_mode: host
 platforms:
-  - name: "${MOLECULE_IMAGE:-ubuntu2404}"
-    image: "docker.io/geerlingguy/docker-${MOLECULE_IMAGE:-ubuntu2204}-ansible:latest"
-    command: ${MOLECULE_DOCKER_COMMAND:-""}
+  - name: ${MOLECULE_CONTAINER_NAME}
+    image: ${MOLECULE_DISTRO}  # Dynamically set via MOLECULE_DISTRO environment variable
+    command: ${MOLECULE_DOCKER_COMMAND:-""} # Ensure container remains running
+    privileged: true  # Allow necessary operations inside the container
     volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:rw
-    privileged: true
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw  # Required for systemd compatibility
     pre_build_image: true
     cgroupns_mode: host
-  - name: "${MOLECULE_IMAGE:-debian12}"
-    image: "docker.io/geerlingguy/docker-${MOLECULE_IMAGE:-debian12}-ansible:latest"
-    command: ${MOLECULE_DOCKER_COMMAND:-""}
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:rw
-    privileged: true
-    pre_build_image: true
-    cgroupns_mode: host
-  - name: "${MOLECULE_IMAGE:-fedora40}"
-    image: "docker.io/geerlingguy/docker-${MOLECULE_IMAGE:-fedora40}-ansible:latest"
-    command: ${MOLECULE_DOCKER_COMMAND:-""}
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:rw
-    privileged: true
-    pre_build_image: true
-    cgroupns_mode: host
+
 provisioner:
   name: ansible
 verifier:

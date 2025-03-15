@@ -35,11 +35,11 @@ jobs:
     needs: lint
     strategy:
       fail-fast: false
-      # matrix:
-      #   distro:
-      #     - ubuntu2404
-      #     - debian12
-      #     - fedora40
+      matrix:
+        distro:
+          - ubuntu2404
+          - debian12
+          - fedora40
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -52,7 +52,9 @@ jobs:
         env:
           PY_COLORS: "1"
           ANSIBLE_FORCE_COLOR: "1"
-          # MOLECULE_IMAGE: "${{ matrix.distro }}"
+          MOLECULE_IMAGE: "${{ matrix.distro }}"
+          MOLECULE_DISTRO: "${{ matrix.distro }}"
+          MOLECULE_CONTAINER_NAME: "instance-${{ matrix.distro }}"
 
   galaxy:
     name: Galaxy

@@ -36,6 +36,10 @@ molecule test --all --driver-name=podman
 molecule test --all -d docker
 
 yamllint -v . && ansible-lint -v . && molecule test --all
+
+tox
+tox -e lint
+tox -e fedora40
 ```
 
 
