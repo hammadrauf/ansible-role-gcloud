@@ -38,8 +38,9 @@ molecule test --all -d docker
 yamllint -v . && ansible-lint -v . && molecule test --all
 
 tox
-tox -e lint
-tox -e fedora40
+tox -p auto   # Runs tox environments in parallel, depending on local cpu core count and depends clause.
+tox -e lint   # Runs only lint tox environment
+tox -e fedora40  # Runs only fedora40 tox environment, if it depends on another tox environment, that should also execute.
 ```
 
 
