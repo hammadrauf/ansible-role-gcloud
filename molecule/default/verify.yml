@@ -1,0 +1,19 @@
+---
+- name: "Verify gcloud installation in Podman container {{ lookup('ansible.builtin.env', 'MOLECULE_CONTAINER_NAME') }}"
+  hosts: all
+  tasks:
+
+    - name: Run Podman container and execute gcloud command
+      ansible.builtin.command:
+        cmd: gcloud --version
+      register: gcloud_version_output
+      changed_when: false                          # Prevent marking this task as changed
+      failed_when: gcloud_version_output.rc != 0   # Mark as failure if command exits non-zero
+
+    - name: Assert gcloud command gcloud_version_output
+      ansible.builtin.assert:
+        that:
+          - "'Google Cloud SDK' in gcloud_version_output.stdout"
+          - "'core' in gcloud_version_output.stdout"
+          - gcloud_version_output.rc == 0
+        fail_msg: "gcloud command failed or --version output is incorrect."
