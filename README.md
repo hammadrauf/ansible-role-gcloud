@@ -1,5 +1,5 @@
 Google Cloud CLI
-=========
+================
 
 Ansible role to install [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) linux. 
 Forked from [labasubagia.gcloud](https://github.com/labasubagia/ansible-role-gcloud) but heavily re-scripted.
