@@ -8,6 +8,7 @@
   when:
     - ansible_facts['os_family'] == "Debian"
 
+
 - name: Update all packages for RHEL Family
   ansible.builtin.dnf:
     name: "*"
