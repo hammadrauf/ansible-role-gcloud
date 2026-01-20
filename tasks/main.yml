@@ -28,11 +28,11 @@
   when:
     - ansible_facts['os_family'] == "Debian"
 
-- name: Add GCloud key downloaded from URL to GCloud Keyring
-  ansible.builtin.apt_key:
+- name: Download Google Cloud GPG key
+  ansible.builtin.get_url:
     url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-    keyring: /usr/share/keyrings/cloud.google.gpg
-    state: present
+    dest: /usr/share/keyrings/cloud.google.gpg
+    mode: '0644'
   become: true
   when:
     - ansible_facts['os_family'] == "Debian"
